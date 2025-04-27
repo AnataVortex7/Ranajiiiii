@@ -560,6 +560,44 @@ async def process_pwwp(bot: Client, m: Message, user_id: int):
                                 subject_name = subject.get("subject", "Unknown Subject").replace("/", "-")
                                 if subject_name in all_subject_urls:
                                     f.write('\n'.join(all_subject_urls[subject_name]) + '\n')
+                         # ---- Start of New Code ----
+# HTML file generate karna
+html_content = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Batch Files</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
+</head>
+<body>
+<h1>Batch Files</h1>
+"""
+
+for line in today_schedule:
+    if ':' in line:
+        name, url = line.split(':', 1)
+        url = url.strip()
+        if url.endswith('.mp4'):
+            html_content += f'<h3>{name.strip()}</h3>\n'
+            html_content += f'<video playsinline controls><source src="{url}" type="video/mp4"></video><br><br>\n'
+        elif url.endswith('.pdf'):
+            html_content += f'<h3>{name.strip()}</h3>\n'
+            html_content += f'<a href="{url}" target="_blank" class="pdf-link">Open PDF</a><br><br>\n'
+
+html_content += """
+<script>
+    const players = Array.from(document.querySelectorAll('video')).map(p => new Plyr(p));
+</script>
+</body>
+</html>
+"""
+
+with open(f"{clean_file_name}.html", "w", encoding="utf-8") as html_file:
+    html_file.write(html_content)
+# ---- End of New Code ----           
 
                     else:
                         raise Exception(f"Error fetching batch details: {batch_details.get('message')}")
