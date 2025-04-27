@@ -72,6 +72,23 @@ async def start(bot, message):
     quote=True,
     reply_markup=reply_markup
   )
+    from pyrogram import Client, filters
+
+app = Client("your_bot")
+
+# /help command ka reply
+@app.on_message(filters.command("help"))
+async def help_command(client, message):
+    await message.reply_text(
+        "**Help Menu**\n\n"
+        "/start - Start the bot\n"
+        "/help - Show this help message\n"
+        "/ping - Check bot's status\n"
+        "/download - Download a file\n"
+        "/status - Show current status\n\n"
+        "**Need more help?** Contact @@Nothing_ji"
+    )
+
 @bot.on_message(group=2)
 #async def account_login(bot: Client, m: Message):
 #    try:
